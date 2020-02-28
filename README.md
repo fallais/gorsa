@@ -8,7 +8,7 @@
 import "github.com/fallais/gorsa"
 ```
 
-Construct a new QRadar client, then use the various services on the client to access different parts of the RSA SA API. For example:
+Construct a new RSA client, then use the various services on the client to access different parts of the RSA SA API. For example:
 
 ```go
 client := gorsa.NewClient(nil)
