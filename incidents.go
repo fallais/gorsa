@@ -85,7 +85,7 @@ type ErrorResponse struct {
 // ListIncidents returns the incidents with given cirterias.
 func (endpoint *Endpoint) ListIncidents(ctx context.Context, since, until string, perPage, pageNumber int) (*IncidentsResponse, error) {
 	// Authenticate and get the token
-	token, err := endpoint.client.Authenticate()
+	token, err := endpoint.client.Authenticate(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error while authenticating : %s", err)
 	}
@@ -103,11 +103,10 @@ func (endpoint *Endpoint) ListIncidents(ctx context.Context, since, until string
 	reqURL.RawQuery = parameters.Encode()
 
 	// Create the request
-	req, err := http.NewRequest("GET", reqURL.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", reqURL.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("Error while creating the request : %s", err)
 	}
-	req = req.WithContext(ctx)
 
 	// Set HTTP headers
 	req.Header.Set("NetWitness-Token", token)

@@ -2,6 +2,7 @@ package gorsa
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -60,7 +61,7 @@ func NewClient(httpClient *http.Client, baseURL, username, password string) *Cli
 //------------------------------------------------------------------------------
 
 // Authenticate to the REST API.
-func (c *Client) Authenticate() (string, error) {
+func (c *Client) Authenticate(ctx context.Context) (string, error) {
 	// Prepare the URL
 	var reqURL *url.URL
 	reqURL, err := url.Parse(c.BaseURL)
@@ -76,7 +77,7 @@ func (c *Client) Authenticate() (string, error) {
 	}
 
 	// Create the request
-	req, err := http.NewRequest("POST", reqURL.String(), bytes.NewBufferString(form.Encode()))
+	req, err := http.NewRequestWithContext(ctx, "POST", reqURL.String(), bytes.NewBufferString(form.Encode()))
 	if err != nil {
 		return "", fmt.Errorf("Error while creating the request : %s", err)
 	}
